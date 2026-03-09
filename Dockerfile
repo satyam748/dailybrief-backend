@@ -2,11 +2,12 @@
 FROM gradle:8.5-jdk17 AS build
 WORKDIR /app
 COPY . .
-RUN gradle bootJar --no-daemon
+ENV GRADLE_OPTS="-Dorg.gradle.jvmargs=-Xmx512m -Dorg.gradle.daemon=false -Dkotlin.compiler.execution.strategy=in-process"
+RUN gradle bootJar --no-daemon -x test
 
 # Stage 2: Runtime
 FROM eclipse-temurin:17-jdk-jammy
 WORKDIR /app
-COPY --from=build /app/build/libs/dailybrief-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/build/libs/*.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-Xmx512m", "-jar", "app.jar"]
