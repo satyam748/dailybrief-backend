@@ -2,10 +2,7 @@ package com.satyam.dailybrief.controller;
 
 import com.satyam.dailybrief.model.Article;
 import com.satyam.dailybrief.service.NewsService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,7 +17,7 @@ public class NewsController {
     }
 
     @GetMapping
-    public List<Article> getNews() {
-        return newsService.getTopNews();
+    public List<Article> getNews(@RequestParam(required = false) String category) {
+        return newsService.getTopNews(category);
     }
 }

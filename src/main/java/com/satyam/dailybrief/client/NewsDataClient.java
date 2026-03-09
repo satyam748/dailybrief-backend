@@ -23,9 +23,13 @@ public class NewsDataClient {
         this.restTemplate = restTemplate;
     }
 
-    public List<Article> fetch() {
+    public List<Article> fetch(String category) {
 
         String url = apiUrl + "?apikey=" + apiKey + "&country=in&language=en";
+
+        if (category != null && !category.isBlank()) {
+            url += "&category=" + category;
+        }
     
         NewsApiResponse response = restTemplate.getForObject(url, NewsApiResponse.class);
 
