@@ -19,12 +19,15 @@ public class NewsService {
         this.client = client;
     }
 
-    @Cacheable("news")
+    @Cacheable(value = "news", key = "#category != null ? #category : 'top'")
     public List<Article> getTopNews(String category) {
+        System.out.println("Fetching from NewsData API for category: " + category);
         return client.fetch(category);
     }
 
     @CacheEvict(value = "news", allEntries = true)
-    @Scheduled(fixedRate = 12000) // 2 mins
-    public void evictCache() {}
+    @Scheduled(fixedRate = 12000) // 2 minutes
+    public void evictCache() {
+        System.out.println("Cache cleared");
+    }
 }
