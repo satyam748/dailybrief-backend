@@ -45,7 +45,7 @@ public class NewsDataClient {
                         r.getTitle(),
                         r.getDescription(),
                         r.getLink(),
-                        r.getSource_id()
+                        r.getArticle_id()
                 ))
                 .collect(Collectors.toList());
     }
