@@ -17,7 +17,11 @@ public class NewsDataClient {
     @Value("${newsdata.api.url}")
     private String apiUrl;
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
+
+    public NewsDataClient(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     public List<Article> fetch() {
 
@@ -25,9 +29,14 @@ public class NewsDataClient {
     
         NewsApiResponse response = restTemplate.getForObject(url, NewsApiResponse.class);
 
+        if (response == null || response.getResults() == null) {
+            return List.of();
+        }
+
         return response.getResults()
                 .stream()
-                .limit(7)
+                .filter(r -> r.getTitle() != null && r.getDescription() != null)
+                .limit(30)
                 .map(r -> new Article(
                         r.getTitle(),
                         r.getDescription(),

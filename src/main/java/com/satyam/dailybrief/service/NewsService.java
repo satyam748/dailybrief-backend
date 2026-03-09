@@ -10,7 +10,6 @@ import java.util.List;
 @Service
 public class NewsService {
 
-    @Autowired
     private final NewsDataClient client;
 
     public NewsService(NewsDataClient client) {
