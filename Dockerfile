@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM gradle:8.5-jdk17 AS build
+FROM gradle:8.14-jdk17 AS build
 WORKDIR /app
 COPY . .
 ENV GRADLE_OPTS="-Dorg.gradle.jvmargs=-Xmx512m -Dorg.gradle.daemon=false -Dkotlin.compiler.execution.strategy=in-process"
