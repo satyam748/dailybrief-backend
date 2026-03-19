@@ -1,11 +1,14 @@
 package com.satyam.dailybrief.client;
 
 import com.satyam.dailybrief.model.*;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -27,26 +30,28 @@ public class NewsDataClient {
 
         String url = apiUrl + "?apikey=" + apiKey + "&country=in&language=en";
 
-        if (category != null && !category.isBlank()) {
+        if (Strings.isNotBlank(category)) {
             url += "&category=" + category;
         }
     
         NewsApiResponse response = restTemplate.getForObject(url, NewsApiResponse.class);
 
-        if (response == null || response.getResults() == null) {
+        if (Objects.isNull(response) || Objects.isNull(response.getResults())) {
             return List.of();
         }
 
         return response.getResults()
                 .stream()
-                .filter(r -> r.getTitle() != null && r.getDescription() != null)
+                .filter(r -> Objects.nonNull(r.getTitle()) && Objects.nonNull(r.getDescription()))
                 .limit(30)
-                .map(r -> new Article(
-                        r.getTitle(),
-                        r.getDescription(),
-                        r.getLink(),
-                        r.getArticle_id()
-                ))
+                .map(r -> {
+                    String description = r.getDescription();
+                            String[] words = description.split("\\s+");
+                            if (words.length > 50) {
+                                description = String.join(" ", Arrays.copyOfRange(words, 0, 50)) + "...";
+                            }
+                   return Article.builder().title(r.getTitle()).summary(description).url(r.getLink()).source(r.getArticle_id()).build();
+                })
                 .collect(Collectors.toList());
     }
 }

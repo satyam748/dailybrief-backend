@@ -1,15 +1,12 @@
 package com.satyam.dailybrief.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
+@Getter
+@Setter
 public class NewsApiResponse {
     private List<Result> results;
-
-    public List<Result> getResults() {
-        return results;
-    }
-
-    public void setResults(List<Result> results) {
-        this.results = results;
-    }
 }
