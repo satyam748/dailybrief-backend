@@ -9,7 +9,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/news")
-@CrossOrigin(origins = "https://dailybrief-ui.netlify.app")
 public class NewsController {
     private final NewsService newsService;
 
