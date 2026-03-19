@@ -50,7 +50,7 @@ public class NewsDataClient {
                             if (words.length > 50) {
                                 description = String.join(" ", Arrays.copyOfRange(words, 0, 50)) + "...";
                             }
-                   return Article.builder().title(r.getTitle()).summary(description).url(r.getLink()).source(r.getArticle_id()).build();
+                   return Article.builder().title(r.getTitle()).summary(description).url(r.getLink()).source(r.getSource_id()).build();
                 })
                 .collect(Collectors.toList());
     }

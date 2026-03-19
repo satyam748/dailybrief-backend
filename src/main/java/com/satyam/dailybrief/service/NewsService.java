@@ -26,7 +26,7 @@ public class NewsService {
     }
 
     @CacheEvict(value = "news", allEntries = true)
-    @Scheduled(fixedRate = 12000) // 2 minutes
+    @Scheduled(fixedRate = 900_000) // 15 minutes
     public void evictCache() {
         System.out.println("Cache cleared");
     }
