@@ -54,4 +54,28 @@ public class NewsDataClient {
                 })
                 .collect(Collectors.toList());
     }
+
+    public List<Article> search(String query) {
+        String url = apiUrl + "?apikey=" + apiKey + "&language=en&q=" + query;
+
+        NewsApiResponse response = restTemplate.getForObject(url, NewsApiResponse.class);
+
+        if (Objects.isNull(response) || Objects.isNull(response.getResults())) {
+            return List.of();
+        }
+
+        return response.getResults()
+                .stream()
+                .filter(r -> Objects.nonNull(r.getTitle()) && Objects.nonNull(r.getDescription()))
+                .limit(10)
+                .map(r -> {
+                    String description = r.getDescription();
+                    String[] words = description.split("\\s+");
+                    if (words.length > 50) {
+                        description = String.join(" ", Arrays.copyOfRange(words, 0, 50)) + "...";
+                    }
+                    return Article.builder().title(r.getTitle()).summary(description).url(r.getLink()).source(r.getSource_id()).publishedAt(r.getPubDate()).build();
+                })
+                .collect(Collectors.toList());
+    }
 }

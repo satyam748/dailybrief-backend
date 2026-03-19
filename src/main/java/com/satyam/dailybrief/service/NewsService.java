@@ -30,4 +30,8 @@ public class NewsService {
     public void evictCache() {
         System.out.println("Cache cleared");
     }
+
+    public List<Article> searchNews(String query) {
+        return client.search(query);
+    }
 }
