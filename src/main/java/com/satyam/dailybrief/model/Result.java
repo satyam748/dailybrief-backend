@@ -9,5 +9,6 @@ public class Result {
     private String description;
     private String link;
     private String source_id;
+    private String pubDate;
 
 }

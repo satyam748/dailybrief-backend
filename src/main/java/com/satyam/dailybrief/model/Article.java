@@ -7,5 +7,6 @@ public record Article(
         String title,
         String summary,
         String url,
-        String source
+        String source,
+        String publishedAt
 ) {}
