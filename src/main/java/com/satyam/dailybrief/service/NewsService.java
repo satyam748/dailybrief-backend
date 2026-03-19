@@ -2,6 +2,7 @@ package com.satyam.dailybrief.service;
 
 import com.satyam.dailybrief.client.NewsDataClient;
 import com.satyam.dailybrief.model.Article;
+import com.satyam.dailybrief.model.NewsPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -19,10 +20,10 @@ public class NewsService {
         this.client = client;
     }
 
-    @Cacheable(value = "news", key = "#category != null ? #category : 'top'")
-    public List<Article> getTopNews(String category) {
+    @Cacheable(value = "news", key = "#category != null ? #category : 'top'", condition = "#pageToken == null")
+    public NewsPage getTopNews(String category, String pageToken) {
         System.out.println("Fetching from NewsData API for category: " + category);
-        return client.fetch(category);
+        return client.fetch(category, pageToken);
     }
 
     @CacheEvict(value = "news", allEntries = true)

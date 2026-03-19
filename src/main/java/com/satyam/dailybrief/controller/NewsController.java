@@ -1,6 +1,7 @@
 package com.satyam.dailybrief.controller;
 
 import com.satyam.dailybrief.model.Article;
+import com.satyam.dailybrief.model.NewsPage;
 import com.satyam.dailybrief.service.NewsService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +18,8 @@ public class NewsController {
     }
 
     @GetMapping
-    public List<Article> getNews(@RequestParam(required = false) String category) {
-        return newsService.getTopNews(category);
+    public NewsPage getNews(@RequestParam(required = false) String category, @RequestParam(required = false) String pageToken) {
+        return newsService.getTopNews(category, pageToken);
     }
 
     @GetMapping("/search")

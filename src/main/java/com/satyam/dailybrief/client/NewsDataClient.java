@@ -26,21 +26,25 @@ public class NewsDataClient {
         this.restTemplate = restTemplate;
     }
 
-    public List<Article> fetch(String category) {
+    public NewsPage fetch(String category, String pageToken) {
 
         String url = apiUrl + "?apikey=" + apiKey + "&country=in&language=en";
 
         if (Strings.isNotBlank(category)) {
             url += "&category=" + category;
         }
+
+        if(Strings.isNotBlank(pageToken)) {
+            url += "&page=" + pageToken;
+        }
     
         NewsApiResponse response = restTemplate.getForObject(url, NewsApiResponse.class);
 
         if (Objects.isNull(response) || Objects.isNull(response.getResults())) {
-            return List.of();
+            return NewsPage.builder().articles(List.of()).nextPage(null).build();
         }
 
-        return response.getResults()
+        List<Article> articles = response.getResults()
                 .stream()
                 .filter(r -> Objects.nonNull(r.getTitle()) && Objects.nonNull(r.getDescription()))
                 .limit(30)
@@ -53,6 +57,11 @@ public class NewsDataClient {
                    return Article.builder().title(r.getTitle()).summary(description).url(r.getLink()).source(r.getSource_id()).publishedAt(r.getPubDate()).build();
                 })
                 .collect(Collectors.toList());
+
+        return NewsPage.builder()
+                .articles(articles)
+                .nextPage(response.getNextPage())
+                .build();
     }
 
     public List<Article> search(String query) {

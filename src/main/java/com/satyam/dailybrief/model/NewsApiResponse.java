@@ -9,4 +9,5 @@ import java.util.List;
 @Setter
 public class NewsApiResponse {
     private List<Result> results;
+    private String nextPage;
 }
